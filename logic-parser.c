@@ -46,30 +46,32 @@ int matcher(char c){
 
 }
 
-int parseBraces(char *g, int braces){
+int countToCloseBrace(char *g){
+  int counter = 0;
+  for(int i = 0; *(g+i) != '\0'; i++) {
+      if( matcher(g+i) == 2){
+        counter ++;
+      }
+      if( matcher(g+i) == 3){
+        counter --;
+      }
+      if( counter == 0 ){
+        return i;
+      }
+  }
+
+  if(counter != 0){
+    return -1;
+  }
+}
+
+int parseBrace(char *g){
 
 }
 
+
 int parse(char *g) {
-  int result = 0;
-
-  switch (matcher(g))
-  {
-  case 0:
-    result = 1;
-    break;
-
-  case 1:
-    result = 0;
-    break;
-
-  case 3:
-    result = 0;
-    break;
   
-  default:
-    break;
-  }
 
   
   for(int i = 0; *(g+i) != '\0'; i++) {
@@ -86,6 +88,36 @@ int parse(char *g) {
   }
   printf("\n");
   
+  switch (matcher(g))
+  {
+  case 0:
+
+    if(*(g+1) == '\0'){
+      return 1;
+    }else{
+      return 0;
+    }
+    break;
+  
+  case 1:
+    if(countToCloseBrace(g) == strlen(g)){
+        if(parseBrace(g) != 0){
+          return 3;
+        }
+    }
+    break;
+
+  case 4:
+    if(parse(g+1) != 0){
+      return 2;
+    }
+    break;
+
+
+  default:
+    return 0;
+    break;
+  }
 
   return 0;
 }

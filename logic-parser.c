@@ -28,7 +28,7 @@ You may vary this program provided it reads 10 formulas in a file called "input.
 
 
 
-const char * matcher(char c){
+int matcher(char c){
 
   if(c == 'p' || c == 'q' || c == 'r'){
     return 0; //"PR"
@@ -46,10 +46,42 @@ const char * matcher(char c){
 
 }
 
+int parseBraces(char *g, int braces){
+
+}
+
 int parse(char *g) {
+  int result = 0;
+
+  switch (matcher(g))
+  {
+  case 0:
+    result = 1;
+    break;
+
+  case 1:
+    result = 0;
+    break;
+
+  case 3:
+    result = 0;
+    break;
   
-  for(int i = 0; g[i] != '\0'; i++) {
-      printf("%i ",matcher(g[i]));
+  default:
+    break;
+  }
+
+  
+  for(int i = 0; *(g+i) != '\0'; i++) {
+      printf("%i ",matcher(g+i));
+
+      //validate any more braces
+      if( matcher(g+i) == 2){
+        int braceResult = parseBraces((g+i), 1);
+        if(braceResult == 0){ 
+          result = 0; 
+        }
+      }
 
   }
   printf("\n");

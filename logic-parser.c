@@ -74,13 +74,14 @@ int parseBrace(char *g, int length){
   int acceptBC = 0;
   int acceptNG = 1;
   int acceptPR = 1;
+  int BCalreayOccured = 0;
   printf("%s\n",g);
 
   while(i < length){
     switch (matcher(g + i))
       {
       case PR:
-        if(acceptPR){
+        if(acceptPR && !BCalreayOccured){
           acceptPR = 0;
           acceptNG = 0;
           acceptBC = 1;
@@ -91,7 +92,7 @@ int parseBrace(char *g, int length){
         break;
       
       case LB:
-        if(acceptPR){
+        if(acceptPR && !BCalreayOccured){
           int lengthToRB = countToCloseBrace(g+i);
           if(parseBrace(g+i,lengthToRB) != 0){
             acceptPR = 0;
@@ -110,6 +111,7 @@ int parseBrace(char *g, int length){
           acceptPR = 1;
           acceptNG = 1;
           acceptBC = 0;
+          BCalreayOccured = 1;
         }else{
           return 0;
         }

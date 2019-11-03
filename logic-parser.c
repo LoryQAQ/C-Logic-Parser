@@ -26,22 +26,23 @@ char *parttwo(char *g)
 You may vary this program provided it reads 10 formulas in a file called "input.txt" and outputs in the way indicated below to a file called "output.txt".
 */
 
+const int PR = 0; const int BC = 1; const int LB = 2; const int RB = 3; const int NG = 4; const int ER = 5;
 
 
 int matcher(char c){
 
   if(c == 'p' || c == 'q' || c == 'r'){
-    return 0; //"PR"
+    return PR; //"PR"
   }else if(c == 'v' || c == '^' || c == '>'){
-    return 1; //"BC";
+    return BC; //"BC";
   }else if(c == '('){
-    return 2; //"LB";
+    return LB; //"LB";
   }else if(c == ')'){
-    return 3; //"RB";
+    return RB; //"RB";
   }else if(c == '-'){
-    return 4; //"NG";
+    return NG; //"NG";
   }else{
-    return 5; //"ER";
+    return ER; //"ER";
   }
 
 }
@@ -49,10 +50,10 @@ int matcher(char c){
 int countToCloseBrace(char *g){
   int counter = 0;
   for(int i = 0; *(g+i) != '\0'; i++) {
-      if( matcher(g+i) == 2){
+      if( matcher(g+i) == LB){
         counter ++;
       }
-      if( matcher(g+i) == 3){
+      if( matcher(g+i) == RB){
         counter --;
       }
       if( counter == 0 ){
@@ -65,32 +66,18 @@ int countToCloseBrace(char *g){
   }
 }
 
-int parseBrace(char *g){
+int parseBrace(char *g, int length){
+
+
 
 }
 
 
 int parse(char *g) {
-  
 
-  
-  for(int i = 0; *(g+i) != '\0'; i++) {
-      printf("%i ",matcher(g+i));
-
-      //validate any more braces
-      if( matcher(g+i) == 2){
-        int braceResult = parseBraces((g+i), 1);
-        if(braceResult == 0){ 
-          result = 0; 
-        }
-      }
-
-  }
-  printf("\n");
-  
   switch (matcher(g))
   {
-  case 0:
+  case PR:
 
     if(*(g+1) == '\0'){
       return 1;
@@ -99,15 +86,16 @@ int parse(char *g) {
     }
     break;
   
-  case 1:
-    if(countToCloseBrace(g) == strlen(g)){
-        if(parseBrace(g) != 0){
+  case BC:
+    int lengthToRB = countToCloseBrace(g);
+    if( lengthToRB == strlen(g)){
+        if(parseBrace(g, lengthToRB) != 0){
           return 3;
         }
     }
     break;
 
-  case 4:
+  case NG:
     if(parse(g+1) != 0){
       return 2;
     }

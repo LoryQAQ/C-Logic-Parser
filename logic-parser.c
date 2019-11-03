@@ -38,6 +38,8 @@ const char * matcher(char c){
     return "LB";
   }else if(c == ')'){
     return "RB";
+  }else if(c == '-'){
+    return "NG";
   }else{
     return "ER";
   }
@@ -48,7 +50,7 @@ int parse(char *g) {
   
   for(int i = 0; g[i] != '\0'; i++) {
       printf("%s ",matcher(g[i]));
-
+      
   }
   printf("\n");
   

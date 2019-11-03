@@ -1,3 +1,8 @@
 ((pvq)^r)
 r
 (pvq)
+((p>q)v-p)
+-((p^q)v-(p>q))
+-p
+((p^--q)>(-qv-p)) 
+(pvq^r)

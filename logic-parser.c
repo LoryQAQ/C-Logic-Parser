@@ -211,7 +211,7 @@ int main()
   if ((  fp=fopen("input.txt","r"))==NULL){ printf("Error opening file");exit(1); }
   if ((  fpout=fopen("output.txt","w"))==NULL){ printf("Error opening file");exit(1); }/*ouputs to be sent to "output.txt"*/
 
-  fscanf(fp,"%s %s %s %s %s %s",names[0],names[1], names[2], names[3],names[4],names[5],names[6],names[7],names[8],names[9]);/*read input strings from "input.txt"*/
+  fscanf(fp,"%s %s %s %s %s %s %s %s %s",names[0],names[1], names[2], names[3],names[4],names[5],names[6],names[7],names[8],names[9]);/*read input strings from "input.txt"*/
  
   /*lets check your parser*/
   for(i=0;i<inputs;i++)

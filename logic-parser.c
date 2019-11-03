@@ -31,17 +31,17 @@ You may vary this program provided it reads 10 formulas in a file called "input.
 const char * matcher(char c){
 
   if(c == 'p' || c == 'q' || c == 'r'){
-    return "PR";
+    return 0; //"PR"
   }else if(c == 'v' || c == '^' || c == '>'){
-    return "BC";
+    return 1; //"BC";
   }else if(c == '('){
-    return "LB";
+    return 2; //"LB";
   }else if(c == ')'){
-    return "RB";
+    return 3; //"RB";
   }else if(c == '-'){
-    return "NG";
+    return 4; //"NG";
   }else{
-    return "ER";
+    return 5; //"ER";
   }
 
 }
@@ -49,8 +49,8 @@ const char * matcher(char c){
 int parse(char *g) {
   
   for(int i = 0; g[i] != '\0'; i++) {
-      printf("%s ",matcher(g[i]));
-      
+      printf("%i ",matcher(g[i]));
+
   }
   printf("\n");
   
@@ -86,7 +86,7 @@ int main()
   fscanf(fp,"%s %s %s %s %s %s",names[0],names[1], names[2], names[3],names[4],names[5],names[6],names[7],names[8],names[9]);/*read input strings from "input.txt"*/
  
   /*lets check your parser*/
-  for(i=0;i<inputs;i++)
+  for(i=0;i<inputs-9;i++)
     {j=parse(names[i]);
   //     switch(j)
 	// {

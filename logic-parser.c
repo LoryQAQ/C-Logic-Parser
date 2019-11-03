@@ -29,7 +29,9 @@ You may vary this program provided it reads 10 formulas in a file called "input.
 const int PR = 0; const int BC = 1; const int LB = 2; const int RB = 3; const int NG = 4; const int ER = 5;
 
 
-int matcher(char c){
+int matcher(char * symbol){
+  char c = *symbol;
+  // printf("Matched:%c\n",c);
 
   if(c == 'p' || c == 'q' || c == 'r'){
     return PR; //"PR"
@@ -72,6 +74,8 @@ int parseBrace(char *g, int length){
   int acceptBC = 0;
   int acceptNG = 1;
   int acceptPR = 1;
+  printf("%s\n",g);
+
   while(i < length){
     switch (matcher(g + i))
       {
@@ -138,6 +142,9 @@ int parseBrace(char *g, int length){
 
 int parse(char *g) {
 
+  printf("%s\n",g);
+  printf("%i\n",matcher(g));
+
   switch (matcher(g))
   {
   case PR:
@@ -152,7 +159,11 @@ int parse(char *g) {
   case LB:
   {
     int lengthToRB = countToCloseBrace(g);
-    if( lengthToRB == strlen(g)){
+
+      printf("TORB%i\n",lengthToRB);
+      printf("STRLEN%i\n",strlen(g));
+      
+    if( lengthToRB + 1 == strlen(g)){
         if(parseBrace(g, lengthToRB) != 0){
           return 3;
         }
@@ -177,11 +188,11 @@ int parse(char *g) {
 
 
 char *partone(char *g){
-  
+  return 'a';
 }
 
 char *parttwo(char *g){
-
+  return 'a';
 }
 
 
@@ -210,7 +221,8 @@ int main()
 	case(0):fprintf(fpout,"%s is not a formula\n", names[i]);break;
 	case(1):fprintf(fpout,"%s is a proposition\n",names[i]);break;
 	case(2):fprintf(fpout,"%s is a negation\n",names[i]);break;
-	case(3):fprintf(fpout,"%s is a binary formula, the first part is %s and the second part is %s\n",names[i]), partone(names[i]), parttwo(names[i]);break;
+	case(3):fprintf(fpout,"%s is a binary formula, the first part is and the second part is \n",names[i]);break;
+	// case(3):fprintf(fpout,"%s is a binary formula, the first part is %s and the second part is %s\n",names[i], partone(names[i]), parttwo(names[i]));break;
 	default:fprintf(fpout,"%s is not a formula\n",names[i]);break;
 	}
     }

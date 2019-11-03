@@ -67,7 +67,70 @@ int countToCloseBrace(char *g){
 }
 
 int parseBrace(char *g, int length){
+  //i is LB and length is RB
+  int i = 1;
+  int acceptBC = 0;
+  int acceptNG = 1;
+  int acceptPR = 1;
+  while(i < length){
+    switch (matcher(g + i))
+      {
+      case PR:
+        if(acceptPR){
+          acceptPR = 0;
+          acceptNG = 0;
+          acceptBC = 1;
+        }else{
+          return 0;
+        }
 
+        break;
+      
+      case LB:
+        if(acceptPR){
+          int lengthToRB = countToCloseBrace(g+i);
+          if(parseBrace(g+i,lengthToRB) != 0){
+            acceptPR = 0;
+            acceptNG = 0;
+            acceptBC = 1;
+            i += lengthToRB;
+          }
+        }else{
+          return 0;
+        }
+
+        break;
+
+      case BC:
+        if(acceptBC){
+          acceptPR = 1;
+          acceptNG = 1;
+          acceptBC = 0;
+        }else{
+          return 0;
+        }
+
+        break;
+
+
+      case NG:
+        if(!acceptNG){
+          return 0;
+        }
+        break;
+
+
+      default:
+        return 0;
+        break;
+      }
+      i++;
+  }
+
+  if(i==length){
+    return 1;
+  }
+  return 0;
 
 
 }
@@ -86,7 +149,8 @@ int parse(char *g) {
     }
     break;
   
-  case BC:
+  case LB:
+  {
     int lengthToRB = countToCloseBrace(g);
     if( lengthToRB == strlen(g)){
         if(parseBrace(g, lengthToRB) != 0){
@@ -94,6 +158,7 @@ int parse(char *g) {
         }
     }
     break;
+  }
 
   case NG:
     if(parse(g+1) != 0){
@@ -138,16 +203,16 @@ int main()
   fscanf(fp,"%s %s %s %s %s %s",names[0],names[1], names[2], names[3],names[4],names[5],names[6],names[7],names[8],names[9]);/*read input strings from "input.txt"*/
  
   /*lets check your parser*/
-  for(i=0;i<inputs-9;i++)
+  for(i=0;i<inputs;i++)
     {j=parse(names[i]);
-  //     switch(j)
-	// {
-	// case(0):fprintf(fpout,"%s is not a formula\n", names[i]);break;
-	// case(1):fprintf(fpout,"%s is a proposition\n",names[i]);break;
-	// case(2):fprintf(fpout,"%s is a negation\n",names[i]);break;
-	// case(3):fprintf(fpout,"%s is a binary formula, the first part is %s and the second part is %s\n",names[i]), partone(names[i]), parttwo(names[i]);break;
-	// default:fprintf(fpout,"%s is not a formula\n",names[i]);break;
-	// }
+      switch(j)
+	{
+	case(0):fprintf(fpout,"%s is not a formula\n", names[i]);break;
+	case(1):fprintf(fpout,"%s is a proposition\n",names[i]);break;
+	case(2):fprintf(fpout,"%s is a negation\n",names[i]);break;
+	case(3):fprintf(fpout,"%s is a binary formula, the first part is %s and the second part is %s\n",names[i]), partone(names[i]), parttwo(names[i]);break;
+	default:fprintf(fpout,"%s is not a formula\n",names[i]);break;
+	}
     }
  
  

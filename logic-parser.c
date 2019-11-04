@@ -49,7 +49,7 @@ int matcher(char * symbol){
 
 }
 
-int countToCloseBrace(char *g, int findBC){
+int countToRBorBC(char *g, int findBC){
   int counter = 0;
   for(int i = 0; *(g+i) != '\0'; i++) {
       if( matcher(g+i) == LB){
@@ -75,78 +75,6 @@ int countToCloseBrace(char *g, int findBC){
   return -1;
 }
 
-// int parseBrace(char *g, int length){
-//   //i is LB and length is RB
-//   int i = 1;
-//   int acceptBC = 0;
-//   int acceptNG = 1;
-//   int acceptPR = 1;
-//   int BCalreayOccured = 0;
-//   printf("%s\n",g);
-
-//   while(i < length){
-//     switch (matcher(g + i))
-//       {
-//       case PR:
-//         if(acceptPR){
-//           acceptPR = 0;
-//           acceptNG = 0;
-//           acceptBC = 1;
-//         }else{
-//           return 0;
-//         }
-
-//         break;
-      
-//       case LB:
-//         if(acceptPR){
-//           int lengthToRB = countToCloseBrace(g+i);
-//           if(parseBrace(g+i,lengthToRB) != 0){
-//             acceptPR = 0;
-//             acceptNG = 0;
-//             acceptBC = 1;
-//             i += lengthToRB;
-//           }
-//         }else{
-//           return 0;
-//         }
-
-//         break;
-
-//       case BC:
-//         if(acceptBC){
-//           acceptPR = 1;
-//           acceptNG = 1;
-//           acceptBC = 0;
-//         }else{
-//           return 0;
-//         }
-
-//         break;
-
-
-//       case NG:
-//         if(!acceptNG){
-//           return 0;
-//         }
-//         break;
-
-
-//       default:
-//         return 0;
-//         break;
-//       }
-//       i++;
-//   }
-
-//   if(i==length){
-//     return 1;
-//   }
-//   return 0;
-
-
-// }
-
 
 int parse(char *g) {
  
@@ -167,10 +95,10 @@ int parse(char *g) {
   case LB:
   { 
     
-    int lengthToRB = countToCloseBrace(g, 0);
+    int lengthToRB = countToRBorBC(g, 0);
     
     if( lengthToRB + 1 == strlen(g)){
-        int lengthToBC = countToCloseBrace(g+1, 1);
+        int lengthToBC = countToRBorBC(g+1, 1);
         if(lengthToBC == -1){ break; }
         char left[50];
         char right[50];
@@ -186,7 +114,7 @@ int parse(char *g) {
   }
 
   case NG:
-    if(parse((g+1)) != 0){
+    if(parse(g+1) != 0){
       return 2;
     }
     break;
@@ -202,14 +130,21 @@ int parse(char *g) {
 
 
 char *partone(char *g){
-  return "'a'";
+  int lengthToBC = countToRBorBC(g+1, 1);
+  char left[50];
+  strcpy(left, (g+1));
+  *(left+lengthToBC) = '\0';
+
+  return left;
 }
 
 char *parttwo(char *g){
-  return "'a'";
+  int lengthToBC = countToRBorBC(g+1, 1);
+  char right[50];
+  strcpy(right, (g+lengthToBC+2));
+  *(right+strlen(right)-1) = '\0';
+  return right;
 }
-
-
 
 
 int main()

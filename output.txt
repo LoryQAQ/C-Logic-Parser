@@ -1,10 +1,10 @@
-((pvq)^r) is not a formula
+((pvq)^r) is a binary formula, the first part is 'a' and the second part is 'a'
 r is a proposition
-(pvq) is not a formula
-((p>q)v-p) is not a formula
--((p^q)v-(p>q)) is not a formula
+(pvq) is a binary formula, the first part is 'a' and the second part is 'a'
+((p>q)v-p) is a binary formula, the first part is 'a' and the second part is 'a'
+-((p^q)v-(p>q)) is a negation
 -p is a negation
-((p^--q)>(-qv-p)) is not a formula
-(pvq^r) is not a formula
- is not a formula
+((p^-)-q)>(-q(v-p)) is not a formula
+(pvq^r) is a binary formula, the first part is 'a' and the second part is 'a'
+)p^q( is not a formula
  is not a formula

@@ -81,7 +81,7 @@ int parseBrace(char *g, int length){
     switch (matcher(g + i))
       {
       case PR:
-        if(acceptPR && !BCalreayOccured){
+        if(acceptPR){
           acceptPR = 0;
           acceptNG = 0;
           acceptBC = 1;
@@ -92,7 +92,7 @@ int parseBrace(char *g, int length){
         break;
       
       case LB:
-        if(acceptPR && !BCalreayOccured){
+        if(acceptPR){
           int lengthToRB = countToCloseBrace(g+i);
           if(parseBrace(g+i,lengthToRB) != 0){
             acceptPR = 0;
@@ -111,7 +111,6 @@ int parseBrace(char *g, int length){
           acceptPR = 1;
           acceptNG = 1;
           acceptBC = 0;
-          BCalreayOccured = 1;
         }else{
           return 0;
         }
@@ -162,8 +161,6 @@ int parse(char *g) {
   {
     int lengthToRB = countToCloseBrace(g);
 
-      printf("TORB%i\n",lengthToRB);
-      printf("STRLEN%i\n",strlen(g));
       
     if( lengthToRB + 1 == strlen(g)){
         if(parseBrace(g, lengthToRB) != 0){
@@ -190,11 +187,11 @@ int parse(char *g) {
 
 
 char *partone(char *g){
-  return 'a';
+  return "'a'";
 }
 
 char *parttwo(char *g){
-  return 'a';
+  return "'a'";
 }
 
 
@@ -213,7 +210,7 @@ int main()
   if ((  fp=fopen("input.txt","r"))==NULL){ printf("Error opening file");exit(1); }
   if ((  fpout=fopen("output.txt","w"))==NULL){ printf("Error opening file");exit(1); }/*ouputs to be sent to "output.txt"*/
 
-  fscanf(fp,"%s %s %s %s %s %s %s %s %s",names[0],names[1], names[2], names[3],names[4],names[5],names[6],names[7],names[8],names[9]);/*read input strings from "input.txt"*/
+  fscanf(fp,"%s %s %s %s %s %s %s %s %s %s",names[0],names[1], names[2], names[3],names[4],names[5],names[6],names[7],names[8],names[9]);/*read input strings from "input.txt"*/
  
   /*lets check your parser*/
   for(i=0;i<inputs;i++)
@@ -223,8 +220,8 @@ int main()
 	case(0):fprintf(fpout,"%s is not a formula\n", names[i]);break;
 	case(1):fprintf(fpout,"%s is a proposition\n",names[i]);break;
 	case(2):fprintf(fpout,"%s is a negation\n",names[i]);break;
-	case(3):fprintf(fpout,"%s is a binary formula, the first part is and the second part is \n",names[i]);break;
-	// case(3):fprintf(fpout,"%s is a binary formula, the first part is %s and the second part is %s\n",names[i], partone(names[i]), parttwo(names[i]));break;
+	// case(3):fprintf(fpout,"%s is a binary formula, the first part is and the second part is \n",names[i]);break;
+	case(3):fprintf(fpout,"%s is a binary formula, the first part is %s and the second part is %s\n",names[i], partone(names[i]), parttwo(names[i]));break;
 	default:fprintf(fpout,"%s is not a formula\n",names[i]);break;
 	}
     }

@@ -1,0 +1,10 @@
+((pvq)^r) is a binary formula, the first part is  and the second part is 
+r is a proposition
+(pvq) is a binary formula, the first part is q and the second part is q
+((p>q)v-p) is a binary formula, the first part is -p and the second part is -p
+-((p^q)v-(p>q)) is a negation
+-p is a negation
+((p^--q)>(-qv-p)) is not a formula
+(pvq^r) is not a formula
+)p^q( is not a formula
+--((pvq)^r) is a negation

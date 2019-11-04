@@ -76,6 +76,25 @@ int countToRBorBC(char *g, int findBC){
 }
 
 
+
+char *partone(char *g){
+  int lengthToBC = countToRBorBC(g+1, 1);
+  char left[50];
+  strcpy(left, (g+1));
+  *(left+lengthToBC) = '\0';
+
+  return left;
+}
+
+char *parttwo(char *g){
+  int lengthToBC = countToRBorBC(g+1, 1);
+  char right[50];
+  strcpy(right, (g+lengthToBC+2));
+  *(right+strlen(right)-1) = '\0';
+  return right;
+}
+
+
 int parse(char *g) {
  
   printf("%s\n",g);
@@ -100,12 +119,9 @@ int parse(char *g) {
     if( lengthToRB + 1 == strlen(g)){
         int lengthToBC = countToRBorBC(g+1, 1);
         if(lengthToBC == -1){ break; }
-        char left[50];
-        char right[50];
-        strcpy(left, (g+1));
-        *(left+lengthToBC) = '\0';
-        strcpy(right, (g+lengthToBC+2));
-        *(right+strlen(right)-1) = '\0';
+        char *left = partone(g);
+        char *right = parttwo(g);
+
         if(parse(left)!=0 && parse(right)!=0){
           return 3;
         }
@@ -126,24 +142,6 @@ int parse(char *g) {
   }
 
   return 0;
-}
-
-
-char *partone(char *g){
-  int lengthToBC = countToRBorBC(g+1, 1);
-  char left[50];
-  strcpy(left, (g+1));
-  *(left+lengthToBC) = '\0';
-
-  return left;
-}
-
-char *parttwo(char *g){
-  int lengthToBC = countToRBorBC(g+1, 1);
-  char right[50];
-  strcpy(right, (g+lengthToBC+2));
-  *(right+strlen(right)-1) = '\0';
-  return right;
 }
 
 

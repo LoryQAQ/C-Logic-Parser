@@ -83,7 +83,7 @@ char *partone(char *g){
   strcpy(left, (g+1));
   *(left+lengthToBC) = '\0';
 
-  return left;
+  return strdup(left);
 }
 
 char *parttwo(char *g){
@@ -91,13 +91,13 @@ char *parttwo(char *g){
   char right[50];
   strcpy(right, (g+lengthToBC+2));
   *(right+strlen(right)-1) = '\0';
-  return right;
+  return strdup(right);
 }
 
 
 int parse(char *g) {
  
-  printf("%s\n",g);
+  printf("--paring[%s]--\n",g);
   // printf("%i\n",matcher(g));
 
   switch (matcher(g))
@@ -121,6 +121,8 @@ int parse(char *g) {
         if(lengthToBC == -1){ break; }
         char *left = partone(g);
         char *right = parttwo(g);
+
+        printf("left[%s];right[%s]\n",left,right);
 
         if(parse(left)!=0 && parse(right)!=0){
           return 3;

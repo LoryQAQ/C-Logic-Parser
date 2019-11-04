@@ -49,102 +49,109 @@ int matcher(char * symbol){
 
 }
 
-int countToCloseBrace(char *g){
+int countToCloseBrace(char *g, int findBC){
   int counter = 0;
   for(int i = 0; *(g+i) != '\0'; i++) {
       if( matcher(g+i) == LB){
         counter ++;
       }
-      if( matcher(g+i) == RB){
+      if( matcher(g+i) == RB ){
         counter --;
       }
+
       if( counter == 0 ){
-        return i;
+        if(!findBC){
+          return i;
+        }
+        if(findBC && matcher(g+i) == BC){
+          return i;
+        }
       }
   }
 
   if(counter != 0){
     return -1;
   }
+  return -1;
 }
 
-int parseBrace(char *g, int length){
-  //i is LB and length is RB
-  int i = 1;
-  int acceptBC = 0;
-  int acceptNG = 1;
-  int acceptPR = 1;
-  int BCalreayOccured = 0;
-  printf("%s\n",g);
+// int parseBrace(char *g, int length){
+//   //i is LB and length is RB
+//   int i = 1;
+//   int acceptBC = 0;
+//   int acceptNG = 1;
+//   int acceptPR = 1;
+//   int BCalreayOccured = 0;
+//   printf("%s\n",g);
 
-  while(i < length){
-    switch (matcher(g + i))
-      {
-      case PR:
-        if(acceptPR){
-          acceptPR = 0;
-          acceptNG = 0;
-          acceptBC = 1;
-        }else{
-          return 0;
-        }
+//   while(i < length){
+//     switch (matcher(g + i))
+//       {
+//       case PR:
+//         if(acceptPR){
+//           acceptPR = 0;
+//           acceptNG = 0;
+//           acceptBC = 1;
+//         }else{
+//           return 0;
+//         }
 
-        break;
+//         break;
       
-      case LB:
-        if(acceptPR){
-          int lengthToRB = countToCloseBrace(g+i);
-          if(parseBrace(g+i,lengthToRB) != 0){
-            acceptPR = 0;
-            acceptNG = 0;
-            acceptBC = 1;
-            i += lengthToRB;
-          }
-        }else{
-          return 0;
-        }
+//       case LB:
+//         if(acceptPR){
+//           int lengthToRB = countToCloseBrace(g+i);
+//           if(parseBrace(g+i,lengthToRB) != 0){
+//             acceptPR = 0;
+//             acceptNG = 0;
+//             acceptBC = 1;
+//             i += lengthToRB;
+//           }
+//         }else{
+//           return 0;
+//         }
 
-        break;
+//         break;
 
-      case BC:
-        if(acceptBC){
-          acceptPR = 1;
-          acceptNG = 1;
-          acceptBC = 0;
-        }else{
-          return 0;
-        }
+//       case BC:
+//         if(acceptBC){
+//           acceptPR = 1;
+//           acceptNG = 1;
+//           acceptBC = 0;
+//         }else{
+//           return 0;
+//         }
 
-        break;
-
-
-      case NG:
-        if(!acceptNG){
-          return 0;
-        }
-        break;
+//         break;
 
 
-      default:
-        return 0;
-        break;
-      }
-      i++;
-  }
-
-  if(i==length){
-    return 1;
-  }
-  return 0;
+//       case NG:
+//         if(!acceptNG){
+//           return 0;
+//         }
+//         break;
 
 
-}
+//       default:
+//         return 0;
+//         break;
+//       }
+//       i++;
+//   }
+
+//   if(i==length){
+//     return 1;
+//   }
+//   return 0;
+
+
+// }
 
 
 int parse(char *g) {
-
+ 
   printf("%s\n",g);
-  printf("%i\n",matcher(g));
+  // printf("%i\n",matcher(g));
 
   switch (matcher(g))
   {
@@ -158,12 +165,20 @@ int parse(char *g) {
     break;
   
   case LB:
-  {
-    int lengthToRB = countToCloseBrace(g);
-
-      
+  { 
+    
+    int lengthToRB = countToCloseBrace(g, 0);
+    
     if( lengthToRB + 1 == strlen(g)){
-        if(parseBrace(g, lengthToRB) != 0){
+        int lengthToBC = countToCloseBrace(g+1, 1);
+        if(lengthToBC == -1){ break; }
+        char left[50];
+        char right[50];
+        strcpy(left, (g+1));
+        *(left+lengthToBC) = '\0';
+        strcpy(right, (g+lengthToBC+2));
+        *(right+strlen(right)-1) = '\0';
+        if(parse(left)!=0 && parse(right)!=0){
           return 3;
         }
     }
@@ -171,7 +186,7 @@ int parse(char *g) {
   }
 
   case NG:
-    if(parse(g+1) != 0){
+    if(parse((g+1)) != 0){
       return 2;
     }
     break;

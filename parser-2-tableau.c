@@ -12,10 +12,10 @@ int TabSize=500; /*maximum length of tableau queue, if needed*/
 
 
 /* A set will contain a list of words. Use NULL for emptyset.  */
-  struct set{
-    char *item;/*first word of non-empty set*/
-    struct set *tail;/*remaining words in the set*/
-  };
+struct set{
+  char *item;/*first word of non-empty set*/
+  struct set *tail;/*remaining words in the set*/
+};
 
 /* A tableau will contain a list of pointers to sets (of words).  Use NULL for empty list.*/
 struct tableau {
@@ -26,8 +26,7 @@ struct tableau {
 /*You need to change this next bit and include functions for parse, closed and complete.*/
 
 //----------------------------------- part 1 ----------------------------------- 
-const int PR = 0; const int BC = 1; const int LB = 2; const int RB = 3; const int NG = 4; const int ER = 5;
-
+enum symbols {PR, BC, LB, RB, NG, ER};
 
 int matcher(char * symbol){
   char c = *symbol;
@@ -189,12 +188,10 @@ int main(){
             default:fprintf(fpout, "What the f***!  ");
         }
 
-           
-        
         // if (parse(name)!=0)
         // {
         //     S={name, NULL};/*initialise S with single formula, called name*/
-        //     t={&S, NULL};/* initialise tableau with one set, S*/
+        //     t={&S, NULL};  /* initialise tableau with one set, S*/
         //     complete(&t);
         //     if (closed(&t))  fprintf(fpout, "%s is not satisfiable.\n", name);
         //     else fprintf(fpout, "%s is satisfiable.\n", name);

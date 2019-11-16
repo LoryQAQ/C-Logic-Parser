@@ -151,6 +151,15 @@ struct tableau {
   struct tableau *rest; /*list of pointers to other sets*/
 };
 
+char * prependNg(char * string){
+  char *newstr = malloc(sizeof(string));
+  *newstr = '-';
+  strcpy((newstr+1), string);
+  
+  return newstr;
+
+}
+
 
 int closed(struct tableau *t) {
 
@@ -160,17 +169,29 @@ int closed(struct tableau *t) {
 void complete(struct tableau *t){
   char *g = t->S->item;
   int res = parse(g);
+  char *left;
+  char *right;
+  int rule = 0; // alpha = 1; beta = 2;
+
   printf("res[%s];\n",g);
 
   if(res == 3){//binary
     int bcloc = countToRBorBC(g+1, 1);
-    char *left = partone(g);
-    char *right = parttwo(g);
-    char *bc = g+1+bcloc;
-    *(bc+1) = '\0';
-    printf("bc[%s];left[%s];right[%s]\n",bc,left,right);
+    left = partone(g);
+    right = parttwo(g);
+    char bc = *(g+1+bcloc);
+    if(bc == '^'){
+      rule = 1;
+    }else if(bc == 'v'){
+      rule = 2;
+    }else if(bc == '>'){
+      rule = 2;
+      left = prependNg(left);
+    }
+    printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
 
   }
+
 
 }
 

@@ -171,7 +171,7 @@ void complete(struct tableau *t){
   int res = parse(g);
   char *left;
   char *right;
-  int rule = 0; // alpha = 1; beta = 2;
+  int rule = -1; // proposition = 0; alpha = 1; beta = 2;
 
   printf("res[%s];\n",g);
 
@@ -219,12 +219,12 @@ void complete(struct tableau *t){
       printf("left[%s]\n",left);
     
     }else{ //proposition
-      
+      rule = 0;
     }
     
 
   }else{ //proposition
-      
+    rule = 0;
   }
 
 
@@ -263,8 +263,8 @@ int main(){
             case(0): fprintf(fpout, "%s is not a formula.  \n", name);break;
             case(1): fprintf(fpout, "%s is a proposition. \n ", name);break;
             case(2): fprintf(fpout, "%s is a negation.  \n", name);break;
-            case(3):fprintf(fpout, "%s is a binary. The first part is %s and the second part is %s  \n", name, partone(name), parttwo(name));break;
-            default:fprintf(fpout, "What the f***!  ");
+            case(3): fprintf(fpout, "%s is a binary. The first part is %s and the second part is %s  \n", name, partone(name), parttwo(name));break;
+            default: fprintf(fpout, "What the f***!  ");
         }
 
         if (parsed!=0)

@@ -5,7 +5,7 @@
 
 
 int Fsize=50; /*maximum formula length*/
-int inputs =10;/* number of formulas expected in input.txt*/
+int inputs =1;/* number of formulas expected in input.txt*/
 int ThSize=100;/* maximum size of set of formulas, if needed*/
 int TabSize=500; /*maximum length of tableau queue, if needed*/
 
@@ -86,7 +86,7 @@ char *parttwo(char *g){
 
 int parse(char *g) {
  
-  printf("--paring[%s]--\n",g);
+  // printf("--paring[%s]--\n",g);
   // printf("%i\n",matcher(g));
 
   switch (matcher(g))
@@ -111,7 +111,7 @@ int parse(char *g) {
         char *left = partone(g);
         char *right = parttwo(g);
 
-        printf("left[%s];right[%s]\n",left,right);
+        // printf("left[%s];right[%s]\n",left,right);
 
         if(parse(left)!=0 && parse(right)!=0){
           return 3;
@@ -153,10 +153,12 @@ struct tableau {
 
 
 int closed(struct tableau *t) {
+
   return(0);
 }
 
 void complete(struct tableau *t){
+
 
 }
 

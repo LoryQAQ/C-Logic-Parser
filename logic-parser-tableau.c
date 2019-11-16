@@ -190,6 +190,41 @@ void complete(struct tableau *t){
     }
     printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
 
+
+  }else if(res == 2){ //negation
+
+    if(*(g+1) == '('){ //negated binary
+      int bcloc = countToRBorBC(g+2, 1);
+      left = partone(g+1);
+      right = parttwo(g+1);
+      char bc = *(g+2+bcloc);
+      if(bc == '^'){
+        rule = 2;
+        left = prependNg(left);
+        right = prependNg(right);
+      }else if(bc == 'v'){
+        rule = 1;
+        left = prependNg(left);
+        right = prependNg(right);
+      }else if(bc == '>'){
+        rule = 1;
+        right = prependNg(right);
+      }
+      printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
+
+    }else if(*(g+1) == '-'){ //double negation
+      left = (g+2);
+      right = NULL;
+
+      printf("left[%s]\n",left);
+    
+    }else{ //proposition
+      
+    }
+    
+
+  }else{ //proposition
+      
   }
 
 

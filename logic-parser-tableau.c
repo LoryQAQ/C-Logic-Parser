@@ -190,8 +190,8 @@ int main(){
 
         // if (parse(name)!=0)
         // {
-        //     S={name, NULL};/*initialise S with single formula, called name*/
-        //     t={&S, NULL};  /* initialise tableau with one set, S*/
+        //     S->item = name;
+        //     t->rest = &S;
         //     complete(&t);
         //     if (closed(&t))  fprintf(fpout, "%s is not satisfiable.\n", name);
         //     else fprintf(fpout, "%s is satisfiable.\n", name);

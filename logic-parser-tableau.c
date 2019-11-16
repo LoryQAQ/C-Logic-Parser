@@ -11,17 +11,7 @@ int TabSize=500; /*maximum length of tableau queue, if needed*/
 
 
 
-/* A set will contain a list of words. Use NULL for emptyset.  */
-struct set{
-  char *item;/*first word of non-empty set*/
-  struct set *tail;/*remaining words in the set*/
-};
 
-/* A tableau will contain a list of pointers to sets (of words).  Use NULL for empty list.*/
-struct tableau {
-  struct set * S; /* pointer to first set in non-empty list */
-  struct tableau *rest; /*list of pointers to other sets*/
-};
 
 /*You need to change this next bit and include functions for parse, closed and complete.*/
 
@@ -149,8 +139,26 @@ int parse(char *g) {
 
 //----------------------------------- part 2 ----------------------------------- 
 
-int closed(struct tableau *t) {return(0);}
-void complete(struct tableau *t){}
+/* A set will contain a list of words. Use NULL for emptyset.  */
+struct set{
+  char *item;/*first word of non-empty set*/
+  struct set *tail;/*remaining words in the set*/
+};
+
+/* A tableau will contain a list of pointers to sets (of words).  Use NULL for empty list.*/
+struct tableau {
+  struct set * S; /* pointer to first set in non-empty list */
+  struct tableau *rest; /*list of pointers to other sets*/
+};
+
+
+int closed(struct tableau *t) {
+  return(0);
+}
+
+void complete(struct tableau *t){
+
+}
 
 
 
@@ -179,7 +187,8 @@ int main(){
     for(j=0;j<inputs;j++)
     {
         fscanf(fp, "%s",name);/*read formula*/
-        switch (parse(name))
+        int parsed = parse(name);
+        switch (parsed)
         {
             case(0): fprintf(fpout, "%s is not a formula.  \n", name);break;
             case(1): fprintf(fpout, "%s is a proposition. \n ", name);break;
@@ -188,15 +197,15 @@ int main(){
             default:fprintf(fpout, "What the f***!  ");
         }
 
-        // if (parse(name)!=0)
-        // {
-        //     S->item = name;
-        //     t->rest = &S;
-        //     complete(&t);
-        //     if (closed(&t))  fprintf(fpout, "%s is not satisfiable.\n", name);
-        //     else fprintf(fpout, "%s is satisfiable.\n", name);
-        // }
-        // else  fprintf(fpout, "I told you, %s is not a formula.\n", name);
+        if (parsed!=0)
+        {
+            S->item = name;
+            t->rest = &S;
+            complete(&t);
+            if (closed(&t))  fprintf(fpout, "%s is not satisfiable.\n", name);
+            else fprintf(fpout, "%s is satisfiable.\n", name);
+        }
+        else  fprintf(fpout, "I told you, %s is not a formula.\n", name);
     }
 
  

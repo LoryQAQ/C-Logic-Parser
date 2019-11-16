@@ -158,7 +158,19 @@ int closed(struct tableau *t) {
 }
 
 void complete(struct tableau *t){
+  char *g = t->S->item;
+  int res = parse(g);
+  printf("res[%s];\n",g);
 
+  if(res == 3){//binary
+    int bcloc = countToRBorBC(g+1, 1);
+    char *left = partone(g);
+    char *right = parttwo(g);
+    char *bc = g+1+bcloc;
+    *(bc+1) = '\0';
+    printf("bc[%s];left[%s];right[%s]\n",bc,left,right);
+
+  }
 
 }
 
@@ -202,8 +214,8 @@ int main(){
         if (parsed!=0)
         {
             S->item = name;
-            t->rest = &S;
-            complete(&t);
+            t->S = S;
+            complete(t);
             if (closed(&t))  fprintf(fpout, "%s is not satisfiable.\n", name);
             else fprintf(fpout, "%s is satisfiable.\n", name);
         }

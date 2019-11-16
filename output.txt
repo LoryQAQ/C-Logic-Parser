@@ -1,2 +1,2 @@
 (pvq) is a binary. The first part is p and the second part is q  
-(pvq) is satisfiable.
+(pv is satisfiable.

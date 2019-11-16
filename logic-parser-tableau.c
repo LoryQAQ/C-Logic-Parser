@@ -160,6 +160,20 @@ char * prependNg(char * string){
 
 }
 
+void addToTableauList(struct tableau *t ,char * p, struct set * tailOfSet){
+  struct set * newSet= {p,tailOfSet};
+  struct tableau * newTableau= {newSet,NULL};
+  if(t->S == NULL){
+    t->S = newSet;
+  }else{
+    struct tableau * current = t;
+    while(current->rest!=NULL){
+      current = t->rest;
+    }
+    current->rest = newTableau;
+  }
+}
+
 
 int closed(struct tableau *t) {
 
@@ -225,6 +239,21 @@ void complete(struct tableau *t){
 
   }else{ //proposition
     rule = 0;
+  }
+
+
+  if(rule == 1){ //alpha
+    t->S->item == left;
+    struct set * temp = {right, t->S->tail};
+    t->S->tail = temp;
+
+  }else if(rule == 2){ //beta
+    t = t->rest; //dequeue
+    if(left!=NULL){addToTableauList(t,left,t->S->tail);}
+    if(right!=NULL){addToTableauList(t,right,t->S->tail);}
+
+  }else if(rule == 0){ //proposition
+    
   }
 
 

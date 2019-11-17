@@ -160,18 +160,38 @@ char * prependNg(char * string){
 
 }
 
-void addToTableauList(struct tableau *t ,char * p, struct set * tailOfSet){
-  struct set * newSet= {p,tailOfSet};
-  struct tableau * newTableau= {newSet,NULL};
-  if(t->S == NULL){
-    t->S = newSet;
+struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, char * p, struct set * tailOfSet){
+  struct set * newSet = (struct set *)malloc(sizeof(struct set));
+  newSet->item = p;
+  newSet->tail = tailOfSet;
+
+  struct set * newSetWithHead = (struct set *)malloc(sizeof(struct set));
+
+  if(headOfSet != NULL){
+    newSetWithHead = headOfSet;
+    while(headOfSet->tail!=NULL){
+      headOfSet = headOfSet->tail;
+    }
+    headOfSet->tail = newSet;
+  }else{
+    newSetWithHead = newSet;
+  }
+
+  struct tableau * newTableau = (struct tableau *)malloc(sizeof(struct tableau));
+  newTableau->S = newSetWithHead;
+  newTableau->rest = NULL;
+
+  if(t == NULL){
+    t = newTableau;
   }else{
     struct tableau * current = t;
     while(current->rest!=NULL){
-      current = t->rest;
+      current = current->rest;
     }
     current->rest = newTableau;
   }
+
+  return t;
 }
 
 
@@ -187,6 +207,7 @@ void complete(struct tableau *t){
   int rule = 0; // proposition = 0; alpha = 1; beta = 2;
   
   struct set * currentSet = t->S;
+  struct set * setsBefore = NULL;
 
   while(rule == 0 && currentSet!=NULL){
     char *g = currentSet->item;
@@ -240,12 +261,22 @@ void complete(struct tableau *t){
       
       }else{ //proposition
         rule = 0;
+        if(setsBefore!=NULL){
+          setsBefore->tail = currentSet;
+        }else{
+          setsBefore = currentSet;
+        }
         currentSet = currentSet->tail;
       }
       
 
     }else{ //proposition
       rule = 0;
+      if(setsBefore!=NULL){
+        setsBefore->tail = currentSet;
+      }else{
+        setsBefore = currentSet;
+      }
       currentSet = currentSet->tail;
     }
     
@@ -264,8 +295,8 @@ void complete(struct tableau *t){
 
   }else if(rule == 2){ //beta
     t = t->rest; //dequeue
-    if(left!=NULL){addToTableauList(t,left,t->S->tail);}
-    if(right!=NULL){addToTableauList(t,right,t->S->tail);}
+    if(left!=NULL){t = addToTableauList(t,setsBefore,left,currentSet->tail);}
+    if(right!=NULL){t = addToTableauList(t,setsBefore,right,currentSet->tail);}
     complete(t);
 
   }else if(rule == 0){ //proposition
@@ -324,7 +355,7 @@ int main(){
             t->S = S;
             t->rest = NULL;
             complete(t);
-            if (closed(&t))  fprintf(fpout, "%s is not satisfiable.\n", name);
+            if (closed(t))  fprintf(fpout, "%s is not satisfiable.\n", name);
             else fprintf(fpout, "%s is satisfiable.\n", name);
         }
         else  fprintf(fpout, "I told you, %s is not a formula.\n", name);

@@ -1,2 +1,0 @@
-(((p>q)>(q>p))^-q) is a binary. The first part is ((p>q)>(q>p)) and the second part is -q  
-(((p>q)>(q>p))^-q) is satisfiable.

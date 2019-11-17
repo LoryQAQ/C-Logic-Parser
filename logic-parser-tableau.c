@@ -229,7 +229,7 @@ void complete(struct tableau *t){
         left = prependNg(left);
       }
       printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
-
+      continue;
 
     }else if(res == 2){ //negation
 
@@ -251,6 +251,7 @@ void complete(struct tableau *t){
           right = prependNg(right);
         }
         printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
+        continue;
 
       }else if(*(g+1) == '-'){ //double negation
         rule = 1;
@@ -258,27 +259,26 @@ void complete(struct tableau *t){
         right = NULL;
 
         printf("left[%s]\n",left);
+        continue;
       
       }else{ //proposition
         rule = 0;
-        if(setsBefore!=NULL){
-          setsBefore->tail = currentSet;
-        }else{
-          setsBefore = currentSet;
-        }
-        currentSet = currentSet->tail;
       }
       
 
     }else{ //proposition
       rule = 0;
-      if(setsBefore!=NULL){
-        setsBefore->tail = currentSet;
-      }else{
-        setsBefore = currentSet;
-      }
-      currentSet = currentSet->tail;
     }
+
+
+    if(setsBefore!=NULL){
+      setsBefore->tail = currentSet;
+    }else{
+      setsBefore = (struct set *)malloc(sizeof(struct set));
+      setsBefore->item = currentSet->item;
+      setsBefore->tail = NULL;
+    }
+    currentSet = currentSet->tail;
     
   }
 
@@ -287,6 +287,7 @@ void complete(struct tableau *t){
     currentSet->item = left;
     if(right!=NULL){
       struct set * temp = (struct set *)malloc(sizeof(struct set));
+      // memcpy(temp,currentSet,sizeof(struct set))
       temp->item=right;
       temp->tail=currentSet->tail;
       currentSet->tail = temp;
@@ -355,6 +356,7 @@ int main(){
             t->S = S;
             t->rest = NULL;
             complete(t);
+            
             if (closed(t))  fprintf(fpout, "%s is not satisfiable.\n", name);
             else fprintf(fpout, "%s is satisfiable.\n", name);
         }

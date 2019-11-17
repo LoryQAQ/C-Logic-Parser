@@ -1,2 +1,0 @@
-(p^q) is a binary. The first part is p and the second part is q  
-(p^q) is satisfiable.

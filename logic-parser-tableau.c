@@ -181,79 +181,98 @@ int closed(struct tableau *t) {
 }
 
 void complete(struct tableau *t){
-  char *g = t->S->item;
-  int res = parse(g);
-  char *left;
-  char *right;
-  int rule = -1; // proposition = 0; alpha = 1; beta = 2;
+  
+  char *left = malloc(Fsize);
+  char *right = malloc(Fsize);
+  int rule = 0; // proposition = 0; alpha = 1; beta = 2;
+  
+  struct set * currentSet = t->S;
 
-  printf("res[%s];\n",g);
+  while(rule == 0 && currentSet!=NULL){
+    char *g = currentSet->item;
+    int res = parse(g);
 
-  if(res == 3){//binary
-    int bcloc = countToRBorBC(g+1, 1);
-    left = partone(g);
-    right = parttwo(g);
-    char bc = *(g+1+bcloc);
-    if(bc == '^'){
-      rule = 1;
-    }else if(bc == 'v'){
-      rule = 2;
-    }else if(bc == '>'){
-      rule = 2;
-      left = prependNg(left);
-    }
-    printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
+    printf("res[%s];\n",g);
 
-
-  }else if(res == 2){ //negation
-
-    if(*(g+1) == '('){ //negated binary
-      int bcloc = countToRBorBC(g+2, 1);
-      left = partone(g+1);
-      right = parttwo(g+1);
-      char bc = *(g+2+bcloc);
+    if(res == 3){//binary
+      int bcloc = countToRBorBC(g+1, 1);
+      left = partone(g);
+      right = parttwo(g);
+      char bc = *(g+1+bcloc);
       if(bc == '^'){
+        rule = 1;
+      }else if(bc == 'v'){
+        rule = 2;
+      }else if(bc == '>'){
         rule = 2;
         left = prependNg(left);
-        right = prependNg(right);
-      }else if(bc == 'v'){
-        rule = 1;
-        left = prependNg(left);
-        right = prependNg(right);
-      }else if(bc == '>'){
-        rule = 1;
-        right = prependNg(right);
       }
       printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
 
-    }else if(*(g+1) == '-'){ //double negation
-      left = (g+2);
-      right = NULL;
 
-      printf("left[%s]\n",left);
-    
+    }else if(res == 2){ //negation
+
+      if(*(g+1) == '('){ //negated binary
+        int bcloc = countToRBorBC(g+2, 1);
+        left = partone(g+1);
+        right = parttwo(g+1);
+        char bc = *(g+2+bcloc);
+        if(bc == '^'){
+          rule = 2;
+          left = prependNg(left);
+          right = prependNg(right);
+        }else if(bc == 'v'){
+          rule = 1;
+          left = prependNg(left);
+          right = prependNg(right);
+        }else if(bc == '>'){
+          rule = 1;
+          right = prependNg(right);
+        }
+        printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
+
+      }else if(*(g+1) == '-'){ //double negation
+        rule = 1;
+        left = (g+2);
+        right = NULL;
+
+        printf("left[%s]\n",left);
+      
+      }else{ //proposition
+        rule = 0;
+        currentSet = currentSet->tail;
+      }
+      
+
     }else{ //proposition
       rule = 0;
+      currentSet = currentSet->tail;
     }
     
-
-  }else{ //proposition
-    rule = 0;
   }
 
 
   if(rule == 1){ //alpha
-    t->S->item == left;
-    struct set * temp = {right, t->S->tail};
-    t->S->tail = temp;
+    currentSet->item = left;
+    if(right!=NULL){
+      struct set * temp = (struct set *)malloc(sizeof(struct set));
+      temp->item=right;
+      temp->tail=currentSet->tail;
+      currentSet->tail = temp;
+    }
+    complete(t);
 
   }else if(rule == 2){ //beta
     t = t->rest; //dequeue
     if(left!=NULL){addToTableauList(t,left,t->S->tail);}
     if(right!=NULL){addToTableauList(t,right,t->S->tail);}
+    complete(t);
 
   }else if(rule == 0){ //proposition
-    
+    printf("Branch complete.\n");
+    if(t->rest != NULL){
+        complete(t->rest);
+    }
   }
 
 
@@ -268,8 +287,7 @@ void complete(struct tableau *t){
 int main(){
 
     char *name = malloc(Fsize);
-    struct set * S=(struct set *)malloc(sizeof(struct set));
-    struct tableau * t=(struct tableau *)malloc(sizeof(struct tableau));
+    
 
 /*You should not need to alter the program below.*/
 
@@ -285,6 +303,9 @@ int main(){
     
     for(j=0;j<inputs;j++)
     {
+        struct set * S=(struct set *)malloc(sizeof(struct set));
+        struct tableau * t=(struct tableau *)malloc(sizeof(struct tableau));
+
         fscanf(fp, "%s",name);/*read formula*/
         int parsed = parse(name);
         switch (parsed)
@@ -299,20 +320,24 @@ int main(){
         if (parsed!=0)
         {
             S->item = name;
+            S->tail = NULL;
             t->S = S;
+            t->rest = NULL;
             complete(t);
             if (closed(&t))  fprintf(fpout, "%s is not satisfiable.\n", name);
             else fprintf(fpout, "%s is satisfiable.\n", name);
         }
         else  fprintf(fpout, "I told you, %s is not a formula.\n", name);
+
+        free(S);
+        free(t);
     }
 
  
     fclose(fp);
     fclose(fpout);
     free(name);
-    free(S);
-    free(t);
+    
 
   return(0);
 }

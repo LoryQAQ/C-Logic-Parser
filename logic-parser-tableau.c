@@ -247,8 +247,38 @@ int isFullyExtended(struct tableau *t){
 
 
 int closed(struct tableau *t) {
+  struct tableau * current = t;
+    while(current != NULL){
 
-  return(0);
+      struct set * currentSet = current->S;
+      
+
+      while (currentSet!=NULL)
+      {
+        struct set * currentSet2 = current->S;
+        char *g = currentSet->item;
+
+        while (currentSet2!=NULL)
+        {
+          char *g2 = currentSet2->item;
+          if(*(g)=='-'){
+            g = g+1;
+            if(*g == *g2){
+              printf(RED ">>>>> Tableau is unsatisfiable (%c and -%c) <<<<<\n" RESET, *g);
+              return 1;
+            }
+          }
+          currentSet2 = currentSet2->tail;
+        }
+
+        currentSet = currentSet->tail;
+      }
+
+
+      current = current -> rest;
+    }
+    printf(GREEN ">>>>> Tableau is satisfiable <<<<<\n" RESET);
+    return 0;
 }
 
 struct tableau * complete(struct tableau *t){

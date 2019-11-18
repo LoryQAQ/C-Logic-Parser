@@ -197,6 +197,26 @@ struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, cha
   return pushSetToTableau(t, newSetWithHead);
 }
 
+int isFullyExtended(struct tableau *t){
+  struct tableau * current = t;
+  while(current != NULL){
+    struct set * currentSet = current->S;
+    while (currentSet!=NULL)
+    {
+      char *g = currentSet->item;
+      if(*(g)=='-'){
+        g = g+1;
+      }
+      if(matcher(g)!=PR){
+        return 0;
+      }
+      currentSet = currentSet->tail;
+    }
+    current = current -> rest;
+  }
+  return 1;
+}
+
 
 int closed(struct tableau *t) {
 
@@ -205,7 +225,7 @@ int closed(struct tableau *t) {
 
 struct tableau * complete(struct tableau *t){
 
-  while(t != NULL){
+  while(t != NULL && !isFullyExtended(t)){
 
     char *left = malloc(Fsize);
     char *right = malloc(Fsize);

@@ -13,7 +13,7 @@
 //for some color in console
 
 int Fsize=50; /*maximum formula length*/
-int inputs =1;/* number of formulas expected in input.txt*/
+int inputs =10;/* number of formulas expected in input.txt*/
 int ThSize=100;/* maximum size of set of formulas, if needed*/
 int TabSize=500; /*maximum length of tableau queue, if needed*/
 
@@ -319,14 +319,15 @@ struct tableau * complete(struct tableau *t){
           continue;
         
         }else{ //proposition
+          printf(CYAN "- Skipped proposition (%s) - \n" RESET, g);
           rule = 0;
         }
         
 
       }else{ //proposition
+        printf(CYAN "- Skipped proposition (%s) - \n" RESET, g);
         rule = 0;
       }
-
 
       if(setsBefore!=NULL){
         setsBefore->tail = currentSet;

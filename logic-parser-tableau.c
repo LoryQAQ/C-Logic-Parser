@@ -8,6 +8,7 @@
 #define YELLOW  "\x1b[33m"
 #define BLUE    "\x1b[34m"
 #define MAGENTA "\x1b[35m"
+#define CYAN    "\x1b[36m"
 #define RESET   "\x1b[0m"
 //for some color in console
 
@@ -206,20 +207,20 @@ struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, cha
 
 void printTableau(struct tableau *t){
   struct tableau * current = t;
-  printf("\n[");
+  printf(GREEN "\n[ ");
   while(current != NULL){
-    printf("{");
+    printf("{ ");
     struct set * currentSet = current->S;
     while (currentSet!=NULL)
     {
       char *g = currentSet->item;
-      printf("%s,",g);
+      printf("%s ",g);
       currentSet = currentSet->tail;
     }
     current = current -> rest;
-    printf("},");
+    printf("} ");
   }
-  printf("]\n");
+  printf("]\n\n" RESET);
 }
 
 
@@ -251,7 +252,7 @@ int closed(struct tableau *t) {
 }
 
 struct tableau * complete(struct tableau *t){
-  printf(YELLOW "====================== Completing %s ======================\n" RESET,t->S->item);
+  printf(YELLOW "\n\n====================== Completing %s ======================\n\n" RESET,t->S->item);
 
   while(t != NULL && !isFullyExtended(t)){
 
@@ -266,7 +267,7 @@ struct tableau * complete(struct tableau *t){
       char *g = currentSet->item;
       int res = parse(g);
 
-      printf("res[%s];\n",g);
+      printf(MAGENTA "Now Completing: %s\n" RESET,g);
 
       if(res == 3){//binary
         int bcloc = countToRBorBC(g+1, 1);
@@ -281,7 +282,8 @@ struct tableau * complete(struct tableau *t){
           rule = 2;
           left = prependNg(left);
         }
-        printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
+        printf(CYAN "- Binary - " RESET);
+        printf("bc[%c];rule[%i];left[%s];right[%s];\n\n",bc,rule,left,right);
         continue;
 
       }else if(res == 2){ //negation
@@ -303,7 +305,8 @@ struct tableau * complete(struct tableau *t){
             rule = 1;
             right = prependNg(right);
           }
-          printf("bc[%c];rule[%i];left[%s];right[%s];\n",bc,rule,left,right);
+          printf(CYAN "- Negated binary - " RESET);
+          printf("bc[%c];rule[%i];left[%s];right[%s];\n\n",bc,rule,left,right);
           continue;
 
         }else if(*(g+1) == '-'){ //double negation
@@ -311,7 +314,8 @@ struct tableau * complete(struct tableau *t){
           left = (g+2);
           right = NULL;
 
-          printf("left[%s]\n",left);
+          printf(CYAN "- Double negation - " RESET);
+          printf("left[%s]\n\n",left);
           continue;
         
         }else{ //proposition
@@ -359,12 +363,13 @@ struct tableau * complete(struct tableau *t){
     }else if(rule == 0){ //proposition
       t = pushSetToTableau(t, t->S);
       t=t->rest;
-      printf("Branch complete.\n");
+      printf(BLUE "\nBranch complete, proceding to next tableau..." RESET);
+      printTableau(t);
     }
   }
 
 
-  printf("---------- Tableau now fully extended ----------");
+  printf(GREEN "---------- Tableau now fully extended ----------" RESET);
   printTableau(t);
 
   return t;

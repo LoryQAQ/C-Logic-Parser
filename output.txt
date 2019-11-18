@@ -1,5 +1,5 @@
 (-(p^q)^(p^q)) is a binary. The first part is -(p^q) and the second part is (p^q)  
-(-(p^q)^(p^q)) is satisfiable.
+(-(p^q)^(p^q)) is not satisfiable.
 (p^-p) is a binary. The first part is p and the second part is -p  
 (p^-p) is not satisfiable.
 ((p>q)^(q>r)) is a binary. The first part is (p>q) and the second part is (q>r)  

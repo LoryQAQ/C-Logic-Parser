@@ -258,17 +258,17 @@ int closed(struct tableau *t) {
         struct set * currentSet2 = current->S;
         char *g = currentSet->item;
 
-        while (currentSet2!=NULL)
-        {
-          char *g2 = currentSet2->item;
-          if(*(g)=='-'){
-            g = g+1;
-            if(*g == *g2){
-              printf(RED ">>>>> Tableau is unsatisfiable (%c and -%c) <<<<<\n" RESET, *g);
-              return 1;
-            }
+        if(*(g)=='-'){
+          g = g+1;
+          while (currentSet2!=NULL)
+          {
+            char *g2 = currentSet2->item;
+              if(*g == *g2){
+                printf(RED ">>>>> Tableau is unsatisfiable (%c and -%c) <<<<<\n" RESET, *g);
+                return 1;
+              }
+            currentSet2 = currentSet2->tail;
           }
-          currentSet2 = currentSet2->tail;
         }
 
         currentSet = currentSet->tail;

@@ -207,7 +207,7 @@ struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, cha
 
 void printTableau(struct tableau *t){
   struct tableau * current = t;
-  printf(GREEN "\n[ ");
+  printf(MAGENTA "\n[ ");
   while(current != NULL){
     printf("{ ");
     struct set * currentSet = current->S;

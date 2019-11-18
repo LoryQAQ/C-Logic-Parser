@@ -1,6 +1,6 @@
-(pvq)
 (((p>q)>(q>p))v-q)
 -(((p^q)^---q)>--r)
+(pvq)
 -((q^p)>-q)
 (pvq)
 (pvq)

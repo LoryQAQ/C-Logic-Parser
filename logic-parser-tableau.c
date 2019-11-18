@@ -160,7 +160,8 @@ char * prependNg(char * string){
 
 }
 
-void addToTableauList(struct tableau* t ,struct set * headOfSet, char * p, struct set * tailOfSet){
+void addToTableauList(struct tableau** ta ,struct set * headOfSet, char * p, struct set * tailOfSet){
+  struct tableau* t = *ta; 
   struct set * newSet = (struct set *)malloc(sizeof(struct set));
   newSet->item = p;
   newSet->tail = tailOfSet;
@@ -181,9 +182,9 @@ void addToTableauList(struct tableau* t ,struct set * headOfSet, char * p, struc
   newTableau->S = newSetWithHead;
   newTableau->rest = NULL;
 
-  if(t == NULL){
-    t = (struct tableau *)malloc(sizeof(struct tableau));
-    memcpy(t,newTableau,sizeof(struct tableau));
+  if(*ta == NULL){
+    *ta = newTableau;
+    // memcpy(t,newTableau,sizeof(newTableau));
     // t->S = newTableau->S;
     // t->rest = newTableau->rest;
   }else{
@@ -203,8 +204,10 @@ int closed(struct tableau *t) {
   return(0);
 }
 
-void* complete(struct tableau *t){
+void* complete(struct tableau **ta){
+  struct tableau * t = *ta;
   printf("aaa %p\n",t);
+
   struct tableau * currentT = t;
 
   while(currentT!=NULL){
@@ -304,14 +307,15 @@ void* complete(struct tableau *t){
       // complete(t);
 
     }else if(rule == 2){ //beta
-    printf("bbb %p\n",t);
-      t = t->rest; //dequeue
-      printf("ccc %p\n",t);
-      if(left!=NULL){addToTableauList(t,setsBefore,left,currentSet->tail);}
-      printf("ddd %p\n",t);
-      if(right!=NULL){addToTableauList(t,setsBefore,right,currentSet->tail);}
-      printf("eee %p\n",t);
-      currentT = t; 
+    printf("bbb %p\n",*ta);
+      // t = t->rest; //dequeue
+      *ta = t->rest;
+      printf("ccc %p\n",*ta);
+      if(left!=NULL){addToTableauList(ta,setsBefore,left,currentSet->tail);}
+      printf("ddd %p\n",*ta);
+      if(right!=NULL){addToTableauList(ta,setsBefore,right,currentSet->tail);}
+      printf("eee %p\n",*ta);
+      currentT = *ta; 
       
       // complete(t);
 
@@ -364,18 +368,19 @@ int main(){
 
         if (parsed!=0)
         {
-            struct set S= {name,NULL};
-            struct tableau t= {&S, NULL};
-            // struct set * S= malloc(sizeof(struct set));
-            // struct tableau * t= malloc(sizeof(struct tableau));
-            // S->item = name;
-            // S->tail = NULL;
-            // t->S = S;
-            // t->rest = NULL;
+            // struct set S= {name,NULL};
+            // struct tableau t= {&S, NULL};
+            struct set * S= malloc(sizeof(struct set));
+            struct tableau * t= malloc(sizeof(struct tableau));
+            S->item = name;
+            S->tail = NULL;
+            t->S = S;
+            t->rest = NULL;
             // struct tableau * BITCH ;
+            printf("%p aaaa",&(*t));
             complete(&t);
-            // printf("%p %p",BITCH,&t);
-            if (closed(&t))  fprintf(fpout, "%s is not satisfiable.\n", name);
+            printf("%p aaaa",&(*t));
+            if (closed(t))  fprintf(fpout, "%s is not satisfiable.\n", name);
             else fprintf(fpout, "%s is satisfiable.\n", name);
             // free(&S);
             // free(&t);

@@ -205,15 +205,14 @@ int closed(struct tableau *t) {
 
 struct tableau * complete(struct tableau *t){
   printf("aaa %p\n",t);
-  struct tableau * currentT = t;
 
-  while(currentT!=NULL){
+  while(t != NULL){
 
     char *left = malloc(Fsize);
     char *right = malloc(Fsize);
     int rule = 0; // proposition = 0; alpha = 1; beta = 2;
     
-    struct set * currentSet = currentT->S;
+    struct set * currentSet = t->S;
     struct set * setsBefore = NULL;
 
     while(rule == 0 && currentSet!=NULL){
@@ -302,7 +301,6 @@ struct tableau * complete(struct tableau *t){
         currentSet->tail = temp;
       }
       t = pushSetToTableau(t, currentSet);
-      currentT = t; 
       // complete(t);
 
     }else if(rule == 2){ //beta
@@ -314,15 +312,13 @@ struct tableau * complete(struct tableau *t){
       printf("ddd %p\n",t);
       if(right!=NULL){t = addToTableauList(t,setsBefore,right,currentSet->tail);}
       printf("eee %p\n",t);
-      currentT = t; 
       
       // complete(t);
 
     }else if(rule == 0){ //proposition
+      t = pushSetToTableau(t, t->S);
       t=t->rest;
-      t = pushSetToTableau(t, currentT->S);
       printf("Branch complete.\n");
-      currentT = t;
     }
   }
 

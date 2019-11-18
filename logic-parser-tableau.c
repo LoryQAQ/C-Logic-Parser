@@ -159,6 +159,23 @@ char * prependNg(char * string){
   return newstr;
 
 }
+struct tableau * pushSetToTableau(struct tableau *t,  struct tableau *setToPush){
+  struct tableau * newTableau = (struct tableau *)malloc(sizeof(struct tableau));
+  newTableau->S = setToPush;
+  newTableau->rest = NULL;
+
+  if(t == NULL){
+    t = newTableau;
+  }else{
+    struct tableau * current = t;
+    while(current->rest!=NULL){
+      current = current->rest;
+    }
+    current->rest = newTableau;
+  }
+  return t;
+}
+
 
 struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, char * p, struct set * tailOfSet){
   struct set * newSet = (struct set *)malloc(sizeof(struct set));
@@ -177,21 +194,7 @@ struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, cha
     newSetWithHead = newSet;
   }
 
-  struct tableau * newTableau = (struct tableau *)malloc(sizeof(struct tableau));
-  newTableau->S = newSetWithHead;
-  newTableau->rest = NULL;
-
-  if(t == NULL){
-    t = newTableau;
-  }else{
-    struct tableau * current = t;
-    while(current->rest!=NULL){
-      current = current->rest;
-    }
-    current->rest = newTableau;
-  }
-
-  return t;
+  return pushSetToTableau(t, newSetWithHead);
 }
 
 
@@ -289,6 +292,7 @@ struct tableau * complete(struct tableau *t){
 
 
     if(rule == 1){ //alpha
+      t=t->rest;
       currentSet->item = left;
       if(right!=NULL){
         struct set * temp = (struct set *)malloc(sizeof(struct set));
@@ -297,12 +301,14 @@ struct tableau * complete(struct tableau *t){
         temp->tail=currentSet->tail;
         currentSet->tail = temp;
       }
+      t = pushSetToTableau(t, currentSet);
       currentT = t; 
       // complete(t);
 
     }else if(rule == 2){ //beta
     printf("bbb %p\n",t);
-      t = t->rest; //dequeue
+      t=t->rest;
+      
       printf("ccc %p\n",t);
       if(left!=NULL){t = addToTableauList(t,setsBefore,left,currentSet->tail);}
       printf("ddd %p\n",t);
@@ -313,8 +319,10 @@ struct tableau * complete(struct tableau *t){
       // complete(t);
 
     }else if(rule == 0){ //proposition
+      t=t->rest;
+      t = pushSetToTableau(t, currentT->S);
       printf("Branch complete.\n");
-      currentT = currentT->rest;
+      currentT = t;
     }
   }
 
@@ -378,11 +386,8 @@ int main(){
             // free(&t);
         }
         else  fprintf(fpout, "I told you, %s is not a formula.\n", name);
-
         
     }
-
- 
     fclose(fp);
     fclose(fpout);
     free(name);

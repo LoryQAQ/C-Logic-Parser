@@ -3,6 +3,13 @@
 #include <stdlib.h>     /* malloc, free, rand */
 
 
+#define RED     "\x1b[31m"
+#define GREEN   "\x1b[32m"
+#define YELLOW  "\x1b[33m"
+#define BLUE    "\x1b[34m"
+#define MAGENTA "\x1b[35m"
+#define RESET   "\x1b[0m"
+//for some color in console
 
 int Fsize=50; /*maximum formula length*/
 int inputs =1;/* number of formulas expected in input.txt*/
@@ -197,6 +204,26 @@ struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, cha
   return pushSetToTableau(t, newSetWithHead);
 }
 
+void printTableau(struct tableau *t){
+  struct tableau * current = t;
+  printf("\n[");
+  while(current != NULL){
+    printf("{");
+    struct set * currentSet = current->S;
+    while (currentSet!=NULL)
+    {
+      char *g = currentSet->item;
+      printf("%s,",g);
+      currentSet = currentSet->tail;
+    }
+    current = current -> rest;
+    printf("},");
+  }
+  printf("]\n");
+}
+
+
+
 int isFullyExtended(struct tableau *t){
   struct tableau * current = t;
   while(current != NULL){
@@ -224,6 +251,7 @@ int closed(struct tableau *t) {
 }
 
 struct tableau * complete(struct tableau *t){
+  printf(YELLOW "====================== Completing %s ======================\n" RESET,t->S->item);
 
   while(t != NULL && !isFullyExtended(t)){
 
@@ -335,6 +363,9 @@ struct tableau * complete(struct tableau *t){
     }
   }
 
+
+  printf("---------- Tableau now fully extended ----------");
+  printTableau(t);
 
   return t;
 

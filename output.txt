@@ -1,0 +1,2 @@
+(((pvr)>(q>p))v-r) is a binary. The first part is ((pvr)>(q>p)) and the second part is -r  
+(((pvr)>(q>p))v-r) is satisfiable.

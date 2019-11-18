@@ -204,7 +204,6 @@ int closed(struct tableau *t) {
 }
 
 struct tableau * complete(struct tableau *t){
-  printf("aaa %p\n",t);
 
   while(t != NULL){
 
@@ -284,7 +283,6 @@ struct tableau * complete(struct tableau *t){
         setsBefore->item = currentSet->item;
         setsBefore->tail = NULL;
       }
-      // memcpy(currentSet,currentSet->tail,sizeof(struct set));
       currentSet = currentSet->tail;
       
     }
@@ -295,25 +293,20 @@ struct tableau * complete(struct tableau *t){
       currentSet->item = left;
       if(right!=NULL){
         struct set * temp = (struct set *)malloc(sizeof(struct set));
-        // memcpy(temp,currentSet,sizeof(struct set))
         temp->item=right;
         temp->tail=currentSet->tail;
         currentSet->tail = temp;
       }
       t = pushSetToTableau(t, currentSet);
-      // complete(t);
+
 
     }else if(rule == 2){ //beta
-    printf("bbb %p\n",t);
+    // printf("test1 %p\n",t);
       t=t->rest;
       
-      printf("ccc %p\n",t);
       if(left!=NULL){t = addToTableauList(t,setsBefore,left,currentSet->tail);}
-      printf("ddd %p\n",t);
       if(right!=NULL){t = addToTableauList(t,setsBefore,right,currentSet->tail);}
-      printf("eee %p\n",t);
-      
-      // complete(t);
+
 
     }else if(rule == 0){ //proposition
       t = pushSetToTableau(t, t->S);

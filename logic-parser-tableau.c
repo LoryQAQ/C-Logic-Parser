@@ -160,8 +160,7 @@ char * prependNg(char * string){
 
 }
 
-void addToTableauList(struct tableau** ta ,struct set * headOfSet, char * p, struct set * tailOfSet){
-  struct tableau* t = *ta; 
+struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, char * p, struct set * tailOfSet){
   struct set * newSet = (struct set *)malloc(sizeof(struct set));
   newSet->item = p;
   newSet->tail = tailOfSet;
@@ -182,11 +181,8 @@ void addToTableauList(struct tableau** ta ,struct set * headOfSet, char * p, str
   newTableau->S = newSetWithHead;
   newTableau->rest = NULL;
 
-  if(*ta == NULL){
-    *ta = newTableau;
-    // memcpy(t,newTableau,sizeof(newTableau));
-    // t->S = newTableau->S;
-    // t->rest = newTableau->rest;
+  if(t == NULL){
+    t = newTableau;
   }else{
     struct tableau * current = t;
     while(current->rest!=NULL){
@@ -195,7 +191,7 @@ void addToTableauList(struct tableau** ta ,struct set * headOfSet, char * p, str
     current->rest = newTableau;
   }
 
-  // return t;
+  return t;
 }
 
 
@@ -204,10 +200,8 @@ int closed(struct tableau *t) {
   return(0);
 }
 
-void* complete(struct tableau **ta){
-  struct tableau * t = *ta;
+struct tableau * complete(struct tableau *t){
   printf("aaa %p\n",t);
-
   struct tableau * currentT = t;
 
   while(currentT!=NULL){
@@ -307,15 +301,14 @@ void* complete(struct tableau **ta){
       // complete(t);
 
     }else if(rule == 2){ //beta
-    printf("bbb %p\n",*ta);
-      // t = t->rest; //dequeue
-      *ta = t->rest;
-      printf("ccc %p\n",*ta);
-      if(left!=NULL){addToTableauList(ta,setsBefore,left,currentSet->tail);}
-      printf("ddd %p\n",*ta);
-      if(right!=NULL){addToTableauList(ta,setsBefore,right,currentSet->tail);}
-      printf("eee %p\n",*ta);
-      currentT = *ta; 
+    printf("bbb %p\n",t);
+      t = t->rest; //dequeue
+      printf("ccc %p\n",t);
+      if(left!=NULL){t = addToTableauList(t,setsBefore,left,currentSet->tail);}
+      printf("ddd %p\n",t);
+      if(right!=NULL){t = addToTableauList(t,setsBefore,right,currentSet->tail);}
+      printf("eee %p\n",t);
+      currentT = t; 
       
       // complete(t);
 
@@ -377,9 +370,8 @@ int main(){
             t->S = S;
             t->rest = NULL;
             // struct tableau * BITCH ;
-            printf("%p aaaa",&(*t));
-            complete(&t);
-            printf("%p aaaa",&(*t));
+            t = complete(t);
+            // printf("%p %p",&t);
             if (closed(t))  fprintf(fpout, "%s is not satisfiable.\n", name);
             else fprintf(fpout, "%s is satisfiable.\n", name);
             // free(&S);

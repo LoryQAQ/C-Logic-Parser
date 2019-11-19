@@ -1,0 +1,2 @@
+((p>q)^(p^-q)) is a binary. The first part is (p>q) and the second part is (p^-q)  
+((p>q)^(p^-q)) is not satisfiable.

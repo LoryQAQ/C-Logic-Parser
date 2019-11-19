@@ -184,13 +184,17 @@ struct tableau * pushSetToTableau(struct tableau *t,  struct tableau *setToPush)
   return t;
 }
 
+struct set *cloneSet(struct set *setToClone)
+{
+    if(setToClone==NULL) return NULL;
+    struct set *temp=(struct set *) malloc(sizeof(struct set));
+    char * newItem = strdup(setToClone->item);
+    temp->item=newItem;
+    temp->tail=cloneSet(setToClone->tail);
+    return temp;
+}
 
-struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, char * p, struct set * tailOfSet){
-  struct set * currentTail = (struct set *)malloc(sizeof(struct set));
-  currentTail = tailOfSet;
-  struct set * newSet = (struct set *)malloc(sizeof(struct set));
-  newSet->item = p;
-  newSet->tail = tailOfSet;
+struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, struct set * newSet){
 
   struct set * newSetWithHead = (struct set *)malloc(sizeof(struct set));
 
@@ -391,15 +395,22 @@ struct tableau * complete(struct tableau *t){
         temp->tail=currentSet->tail;
         currentSet->tail = temp;
       }
-      t = pushSetToTableau(t, currentSet);
+      t = addToTableauList(t,setsBeforeHead,currentSet);
 
 
     }else if(rule == 2){ //beta
     // printf("test1 %p\n",t);
       t=t->rest;
+
+        struct set * newSetLeft = (struct set *)malloc(sizeof(struct set));
+        struct set * newSetRight = (struct set *)malloc(sizeof(struct set));
+        newSetLeft->item = left;
+        newSetLeft->tail = cloneSet(currentSet->tail);
+        newSetRight->item = right;
+        newSetRight->tail = cloneSet(currentSet->tail);
       
-      if(left!=NULL){t = addToTableauList(t,setsBeforeHead,left,currentSet->tail);}
-      if(right!=NULL){t = addToTableauList(t,setsBeforeHead,right,currentSet->tail);}
+      if(left!=NULL){t = addToTableauList(t,setsBeforeHead,newSetLeft);}
+      if(right!=NULL){t = addToTableauList(t,setsBeforeHead,newSetRight);}
 
 
     }else if(rule == 0){ //proposition

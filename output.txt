@@ -1,3 +1,5 @@
+((((q^q)v(r^-r))^(p^p))v(pvr)) is a binary. The first part is (((q^q)v(r^-r))^(p^p)) and the second part is (pvr)  
+((((q^q)v(r^-r))^(p^p))v(pvr)) is satisfiable.
 (-(p^q)^(p^q)) is a binary. The first part is -(p^q) and the second part is (p^q)  
 (-(p^q)^(p^q)) is not satisfiable.
 (p^-p) is a binary. The first part is p and the second part is -p  
@@ -16,5 +18,3 @@
 ((p>r)^(r>p)) is satisfiable.
 ((q^r)>p) is a binary. The first part is (q^r) and the second part is p  
 ((q^r)>p) is satisfiable.
-((q^q)^(r^-r)) is a binary. The first part is (q^q) and the second part is (r^-r)  
-((q^q)^(r^-r)) is not satisfiable.

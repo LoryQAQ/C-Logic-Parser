@@ -363,22 +363,25 @@ struct tableau * complete(struct tableau *t){
           continue;
         
         }else{ //proposition
-          printf(CYAN "- Skipped proposition 1 (%s) - \n" RESET, g);
           rule = 0;
         }
         
 
       }else{ //proposition
-        printf(CYAN "- Skipped proposition 2 (%s) - \n" RESET, g);
         rule = 0;
       }
 
+      printf(CYAN "- Skipped propositions - \n\n" RESET, g);
+
       if(setsBefore!=NULL){
-        setsBefore->tail = currentSet;
+        struct set * temp = (struct set *)malloc(sizeof(struct set));
+        temp->item = strdup(currentSet->item);
+        temp->tail = NULL;
+        setsBefore->tail = temp;
         setsBefore = setsBefore->tail;
       }else{
         setsBefore = (struct set *)malloc(sizeof(struct set));
-        setsBefore->item = currentSet->item;
+        setsBefore->item = strdup(currentSet->item);
         setsBefore->tail = NULL;
         setsBeforeHead = setsBefore;
       }
@@ -393,7 +396,7 @@ struct tableau * complete(struct tableau *t){
       if(right!=NULL){
         struct set * temp = (struct set *)malloc(sizeof(struct set));
         temp->item=right;
-        temp->tail=cloneSet(currentSet->tail);
+        temp->tail=currentSet->tail;
         currentSet->tail = temp;
       }
       t = addToTableauList(t,setsBeforeHead,currentSet);

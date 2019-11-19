@@ -13,7 +13,7 @@
 //for some color in console
 
 int Fsize=50; /*maximum formula length*/
-int inputs =10;/* number of formulas expected in input.txt*/
+int inputs =1;/* number of formulas expected in input.txt*/
 int ThSize=100;/* maximum size of set of formulas, if needed*/
 int TabSize=500; /*maximum length of tableau queue, if needed*/
 
@@ -186,6 +186,8 @@ struct tableau * pushSetToTableau(struct tableau *t,  struct tableau *setToPush)
 
 
 struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, char * p, struct set * tailOfSet){
+  struct set * currentTail = (struct set *)malloc(sizeof(struct set));
+  currentTail = tailOfSet;
   struct set * newSet = (struct set *)malloc(sizeof(struct set));
   newSet->item = p;
   newSet->tail = tailOfSet;
@@ -298,6 +300,7 @@ struct tableau * complete(struct tableau *t){
     
     struct set * currentSet = t->S;
     struct set * setsBefore = NULL;
+    struct set * setsBeforeHead = NULL;
 
     while(rule == 0 && currentSet!=NULL){
       char *g = currentSet->item;
@@ -355,22 +358,24 @@ struct tableau * complete(struct tableau *t){
           continue;
         
         }else{ //proposition
-          printf(CYAN "- Skipped proposition (%s) - \n" RESET, g);
+          printf(CYAN "- Skipped proposition 1 (%s) - \n" RESET, g);
           rule = 0;
         }
         
 
       }else{ //proposition
-        printf(CYAN "- Skipped proposition (%s) - \n" RESET, g);
+        printf(CYAN "- Skipped proposition 2 (%s) - \n" RESET, g);
         rule = 0;
       }
 
       if(setsBefore!=NULL){
         setsBefore->tail = currentSet;
+        setsBefore = setsBefore->tail;
       }else{
         setsBefore = (struct set *)malloc(sizeof(struct set));
         setsBefore->item = currentSet->item;
         setsBefore->tail = NULL;
+        setsBeforeHead = setsBefore;
       }
       currentSet = currentSet->tail;
       
@@ -393,8 +398,8 @@ struct tableau * complete(struct tableau *t){
     // printf("test1 %p\n",t);
       t=t->rest;
       
-      if(left!=NULL){t = addToTableauList(t,setsBefore,left,currentSet->tail);}
-      if(right!=NULL){t = addToTableauList(t,setsBefore,right,currentSet->tail);}
+      if(left!=NULL){t = addToTableauList(t,setsBeforeHead,left,currentSet->tail);}
+      if(right!=NULL){t = addToTableauList(t,setsBeforeHead,right,currentSet->tail);}
 
 
     }else if(rule == 0){ //proposition

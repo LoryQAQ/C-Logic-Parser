@@ -252,33 +252,39 @@ int closed(struct tableau *t) {
 
       struct set * currentSet = current->S;
       
-
-      while (currentSet!=NULL)
+      int branchClosed = 0;
+      while (currentSet!=NULL && !branchClosed)
       {
         struct set * currentSet2 = current->S;
         char *g = currentSet->item;
 
         if(*(g)=='-'){
           g = g+1;
-          while (currentSet2!=NULL)
+          
+          while (currentSet2!=NULL && !branchClosed)
           {
             char *g2 = currentSet2->item;
               if(*g == *g2){
-                printf(RED ">>>>> Tableau is unsatisfiable (%c and -%c) <<<<<\n" RESET, *g);
-                return 1;
+                branchClosed = 1;
               }
             currentSet2 = currentSet2->tail;
+            
           }
         }
 
+        if(!branchClosed)
         currentSet = currentSet->tail;
       }
 
-
+      if(currentSet==NULL){ //current branch open, so satisfiable
+        printf(GREEN ">>>>> Tableau is satisfiable <<<<<\n" RESET);
+        return 0;
+      }
+      
       current = current -> rest;
     }
-    printf(GREEN ">>>>> Tableau is satisfiable <<<<<\n" RESET);
-    return 0;
+    printf(RED ">>>>> Tableau is unsatisfiable (No branch is open) <<<<<\n" RESET);
+    return 1;
 }
 
 struct tableau * complete(struct tableau *t){

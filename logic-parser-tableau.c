@@ -13,7 +13,7 @@
 //for some color in console
 
 int Fsize=50; /*maximum formula length*/
-int inputs =1;/* number of formulas expected in input.txt*/
+int inputs =10;/* number of formulas expected in input.txt*/
 int ThSize=100;/* maximum size of set of formulas, if needed*/
 int TabSize=500; /*maximum length of tableau queue, if needed*/
 
@@ -199,13 +199,14 @@ struct tableau * addToTableauList(struct tableau *t ,struct set * headOfSet, str
   struct set * newSetWithHead = (struct set *)malloc(sizeof(struct set));
 
   if(headOfSet != NULL){
-    newSetWithHead = headOfSet;
-    while(headOfSet->tail!=NULL){
-      headOfSet = headOfSet->tail;
+    newSetWithHead = cloneSet(headOfSet);
+    struct set * temp = newSetWithHead;
+    while(temp->tail!=NULL){
+      temp = temp->tail;
     }
-    headOfSet->tail = newSet;
+    temp->tail = newSet;
   }else{
-    newSetWithHead = newSet;
+    newSetWithHead = cloneSet(newSet);
   }
 
   return pushSetToTableau(t, newSetWithHead);
@@ -392,7 +393,7 @@ struct tableau * complete(struct tableau *t){
       if(right!=NULL){
         struct set * temp = (struct set *)malloc(sizeof(struct set));
         temp->item=right;
-        temp->tail=currentSet->tail;
+        temp->tail=cloneSet(currentSet->tail);
         currentSet->tail = temp;
       }
       t = addToTableauList(t,setsBeforeHead,currentSet);

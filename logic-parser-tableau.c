@@ -13,7 +13,7 @@
 //for some colours in the terminal
 
 int Fsize=50; /*maximum formula length*/
-int inputs =20;/* number of formulas expected in input.txt*/
+int inputs =10;/* number of formulas expected in input.txt*/
 int ThSize=100;/* maximum size of set of formulas, if needed*/
 int TabSize=500; /*maximum length of tableau queue, if needed*/
 

@@ -10,10 +10,10 @@
 #define MAGENTA "\x1b[35m"
 #define CYAN    "\x1b[36m"
 #define RESET   "\x1b[0m"
-//for some color in console
+//for some colours in the terminal
 
 int Fsize=50; /*maximum formula length*/
-int inputs =10;/* number of formulas expected in input.txt*/
+int inputs =20;/* number of formulas expected in input.txt*/
 int ThSize=100;/* maximum size of set of formulas, if needed*/
 int TabSize=500; /*maximum length of tableau queue, if needed*/
 
@@ -160,7 +160,7 @@ struct tableau {
 };
 
 char * prependNg(char * string){
-  char *newstr = malloc(sizeof(string));
+  char *newstr = malloc(Fsize);
   *newstr = '-';
   strcpy((newstr+1), string);
   
@@ -327,7 +327,7 @@ struct tableau * complete(struct tableau *t){
           left = prependNg(left);
         }
         printf(CYAN "- Binary - " RESET);
-        printf("bc[%c];rule[%i];left[%s];right[%s];\n\n",bc,rule,left,right);
+        printf("BC[%c] Rule[%i] Left[%s] Right[%s]\n\n",bc,rule,left,right);
         continue;
 
       }else if(res == 2){ //negation
@@ -350,7 +350,7 @@ struct tableau * complete(struct tableau *t){
             right = prependNg(right);
           }
           printf(CYAN "- Negated binary - " RESET);
-          printf("bc[%c];rule[%i];left[%s];right[%s];\n\n",bc,rule,left,right);
+          printf("BC[%c] Rule[%i] Left[%s] Right[%s]\n\n",bc,rule,left,right);
           continue;
 
         }else if(*(g+1) == '-'){ //double negation

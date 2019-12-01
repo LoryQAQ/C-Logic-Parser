@@ -12,7 +12,7 @@
 #define RESET   "\x1b[0m"
 //for some colours in the terminal
 
-int Fsize=50; /*maximum formula length*/
+int Fsize=200; /*maximum formula length*/
 int inputs =10;/* number of formulas expected in input.txt*/
 int ThSize=100;/* maximum size of set of formulas, if needed*/
 int TabSize=500; /*maximum length of tableau queue, if needed*/
@@ -76,7 +76,7 @@ int countToRBorBC(char *g, int findBC){
 
 char *partone(char *g){
   int lengthToBC = countToRBorBC(g+1, 1);
-  char left[50];
+  char left[Fsize];
   strcpy(left, (g+1));
   *(left+lengthToBC) = '\0';
 
@@ -85,7 +85,7 @@ char *partone(char *g){
 
 char *parttwo(char *g){
   int lengthToBC = countToRBorBC(g+1, 1);
-  char right[50];
+  char right[Fsize];
   strcpy(right, (g+lengthToBC+2));
   *(right+strlen(right)-1) = '\0';
   return strdup(right);

@@ -167,7 +167,7 @@ char * prependNg(char * string){
   return newstr;
 
 }
-struct tableau * pushSetToTableau(struct tableau *t,  struct tableau *setToPush){
+struct tableau * pushSetToTableau(struct tableau *t,  struct set *setToPush){
   struct tableau * newTableau = (struct tableau *)malloc(sizeof(struct tableau));
   newTableau->S = setToPush;
   newTableau->rest = NULL;
@@ -371,7 +371,7 @@ struct tableau * complete(struct tableau *t){
         rule = 0;
       }
 
-      printf(CYAN "- Skipped propositions - \n\n" RESET, g);
+      printf(CYAN "- Skipped propositions %s - \n\n" RESET, g);
 
       if(setsBefore!=NULL){
         struct set * temp = (struct set *)malloc(sizeof(struct set));

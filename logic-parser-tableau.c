@@ -12,11 +12,10 @@
 #define RESET   "\x1b[0m"
 //for some colours in the terminal
 
-int Fsize=200; /*maximum formula length*/
+int Fsize=50 * sizeof(char); /*maximum formula length*/
 int inputs =10;/* number of formulas expected in input.txt*/
-int ThSize=100;/* maximum size of set of formulas, if needed*/
-int TabSize=500; /*maximum length of tableau queue, if needed*/
-
+int ThSize=100;/* maximum size of set of formulas*/
+int TabSize=500; /*maximum length of tableau queue*/
 
 
 

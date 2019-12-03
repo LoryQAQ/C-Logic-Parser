@@ -1,3 +1,4 @@
+#define _GNU_SOURCE //https://gist.github.com/emilisto/9620134 & https://stackoverflow.com/questions/9168150/implicit-declaration-using-std-c99
 #include <stdio.h>
 #include <string.h>   /* for all the new-fangled string functions */
 #include <stdlib.h>     /* malloc, free, rand */

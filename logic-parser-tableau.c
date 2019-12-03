@@ -47,7 +47,8 @@ int matcher(char * symbol){
 
 int countToRBorBC(char *g, int findBC){
   int counter = 0;
-  for(int i = 0; *(g+i) != '\0'; i++) {
+  int i = 0;
+  for(i = 0; *(g+i) != '\0'; i++) {
       if( matcher(g+i) == LB){
         counter ++;
       }
